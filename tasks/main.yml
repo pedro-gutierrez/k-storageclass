@@ -3,8 +3,8 @@
   shell: "kubectl delete storageclass {{ name }}"
   ignore_errors: yes
 
-- name: "Wait for {{ name }} storage class"
-  shell: "kubectl get storageclass"
+- name: "Wait for {{ name }} storage class to be deleted"
+  shell: "kubectl get storageclasses"
   register: result
   until: "result.stdout.find(name) == -1"
   retries: "{{ retry.max }}"
