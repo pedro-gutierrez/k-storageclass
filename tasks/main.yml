@@ -1,0 +1,14 @@
+---
+- name: "Delete {{ name }} storage class"
+  shell: "kubectl delete storageclass {{ name }}"
+  ignore_errors: yes
+
+- name: "Wait for {{ name }} storage class"
+  shell: "kubectl get storageclass"
+  register: result
+  until: "result.stdout.find(name) == -1"
+  retries: "{{ retry.max }}"
+  delay: "{{ retry.delay }}"
+
+- name: "Create {{ name }} storage class"
+  shell: "kubectl create -f {{ yamls }}/{{ name }}-storageclass.yml"
